@@ -1,0 +1,129 @@
+body{
+	margin: 0;
+	background-color: #efefef;
+}
+a{
+	text-decoration: none;
+}
+table{
+	margin: 0 auto;
+	padding: 20px;
+	border-collapse: collapse;
+	padding: 0;
+}
+.columna{
+	display: inline-block;
+	vertical-align: top;
+}
+.noMargin{
+	margin: 0;
+}
+.marginLeft{
+	margin-left: 20px;
+}
+.marginBottom{
+	margin-bottom: 20px;
+}
+.redondeado{
+	background-color: white;
+	padding: 20px;
+	border-radius: 15px;
+}
+.padding10{
+	padding: 10px;
+}
+.textCenter{
+	text-align: center;
+}
+td, th{
+	padding: 2px;
+	border: 1px solid black;
+}
+table a{
+	padding: 10px;
+	margin: 0;
+	display: block;
+	background-color: white;
+}
+span{
+	padding: 10px;
+	margin: 0;
+	display: block;
+}
+.celdas{
+	height: 18px;
+}
+.tocado{
+	background-color: orange;
+}
+.hundido{
+	background-color: red;
+}
+.agua{
+	background-color: blue;
+}
+.boton  {
+	font-size: 18px;
+	display: inline-block;
+	padding: 8px 16px;
+	border-radius: 25px;
+	background-color: #4CAF50;
+	color: white;
+	border:none;
+}
+
+.boton:hover {
+	background-color: #72CE76 !important; 
+	color: black !important;
+	cursor:pointer; cursor: hand;
+}
+.central > div{
+	width: 100%;
+	margin: 20px 1%;
+	float:left;
+	min-width: 350px;
+	padding-bottom: 10px;
+}
+.central{
+	text-align: center;
+	width: 100%;
+	margin: 0 auto;
+	padding-bottom: 30px;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	justify-content: space-around;
+}
+.central h2{
+	width: 80%;
+	min-width: 300px;
+	background-color: white;
+	border-radius: 15px;
+	padding: 10px;
+	margin: 10px 1%;
+}
+.error{
+	color:red;
+	font-size: 30px;
+}
+.inicio{
+	margin: 8% auto 0 auto;
+	width: 450px;
+	min-width: 300px;
+	position: relative;
+	background-color: white;
+	border-radius: 15px;
+}
+.inicio > div{
+	padding: 20px;
+}
+.inicio h1{
+	margin: 0;
+	border-radius: 15px 15px 0 0;
+	padding: 14px 16px;
+	text-align: center;
+	color: white;
+	background: #333;
+}
+.inicio .boton{
+	width: 100%;
+}

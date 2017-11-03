@@ -95,22 +95,25 @@
 			}
 		}
 
+		//Genera barcos aleatoriamente
+		function setBarcosAleatorios($cant = 1, $minLength = 1, $maxLength = 5){
+			$barcos = array();
+			for($i = 0; $i < $cant; $i++){
+				$barcos[] = rand($minLength, $maxLength);
+			}
+			rsort($barcos);
+			$_SESSION['barcosActuales'] = $barcos; //Contiene los barcos que estan en flote
+		}
+
 		//Coloca los barcos aleatoriamente en el tablero
 		function colocarBarcos(){
-			//Contiene la longitud de cada barco
-			$barcos = array(
-				5,
-				5,
-				4,
-				3,
-				2,
-				2,
-				1
-			);
+			if(!isset($_SESSION['barcosActuales'])||empty($_SESSION['barcosActuales'])) return false;
 
-			$_SESSION['estadoBarcos'] = $barcos;
-			$_SESSION['finPartida'] = 0;
-			$_SESSION['intentos'] = 0;
+			$barcos = $_SESSION['barcosActuales']; //Contiene los barcos que sigen en flote
+
+			$_SESSION['estadoBarcos'] = $barcos; //Contiene el largo de cada barco
+			$_SESSION['finPartida'] = 0; //Contiene el largo total de todos los barcos
+			$_SESSION['intentos'] = 0; //Contiene los disparos fallidos
 
 			$filas = count($_SESSION['tablero']);
 			$columnas = count($_SESSION['tablero'][0]);
@@ -135,6 +138,7 @@
 					}else if($intentos == 2000 || $rango1 < 0) {
 						unset($_SESSION['tablero']);
 						unset($_SESSION['estadoBarcos']);
+						unset($_SESSION['barcosActuales']);
 						unset($_SESSION['finPartida']);
 						unset($_SESSION['intentos']);
 						return false;
@@ -200,8 +204,9 @@
 			return true;
 		}
 
-		//Hundir un barco completo
+		//Hundir un barco por id
 		function hundirBarco($idBarco){
+			unset($_SESSION['barcosActuales'][$idBarco]);
 			foreach ($_SESSION['tablero'] as $indexFila => $fila) {
 				foreach ($fila as $indexColumnas => $valor) {
 					$id = explode(" ", $valor)[0];
@@ -302,5 +307,21 @@
 				$_SESSION['mensaje'] .= $mensaje;
 			else
 				$_SESSION['mensaje'] = $mensaje;
+		}
+
+		//obtiene cuantos barcos hay y de que largo
+		function getCantBarcos(){
+			$cantidad = array();
+			$barcos = $_SESSION['barcosActuales'];
+
+			foreach ($barcos as $key => $value) {
+				if(array_key_exists($value, $cantidad)){
+					$cantidad[$value] ++;
+				}else{
+					$cantidad[$value] = 1;
+				}
+			}
+
+			return $cantidad;
 		}
 ?>
