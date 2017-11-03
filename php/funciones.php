@@ -107,6 +107,9 @@
 
 		//Coloca los barcos aleatoriamente en el tablero
 		function colocarBarcos(){
+			do{
+
+			}while(true && false);
 			if(!isset($_SESSION['barcosActuales'])||empty($_SESSION['barcosActuales'])) return false;
 
 			$barcos = $_SESSION['barcosActuales']; //Contiene los barcos que sigen en flote
@@ -128,27 +131,46 @@
 				//En posicion almacenan la posicion del barco
 				$posicion1;
 				$posicion2;
-			
+				//Buscar coordenades para encontrar un siteo para meter el barco sin que haya otro alrededor
 				do{
 					//Cambiar la direccion si no encuentra un lugar donde ponerse o no cabe en el tablero
 					if($intentos == 1000 || ($intentos < 1000 && $rango1 < 0)){
 						$direccion = $direccion == 1 ? 0 : 1;
 						$rango1 = ($direccion == 0 ? $filas : $columnas) - $largo;
 						$rango2 = ($direccion == 0 ? $columnas : $filas) - 1;
-					}else if($intentos == 2000 || $rango1 < 0) {
-						unset($_SESSION['tablero']);
-						unset($_SESSION['estadoBarcos']);
-						unset($_SESSION['barcosActuales']);
-						unset($_SESSION['finPartida']);
-						unset($_SESSION['intentos']);
-						return false;
-					}
+					}else if($intentos == 2000 || $rango1 < 0) break;
 
 					$intentos ++;
 
 					$posicion1 = mt_rand(0, $rango1);
 					$posicion2 = rand(0, $rango2);
-				}while(!sePuedeColocarBarco($posicion1, $posicion2, $largo, $direccion));
+				}while(!sePuedeColocarBarco($posicion1, $posicion2, $largo, $direccion) || hayBarcosAlLado($posicion1, $posicion2, $largo, $direccion));
+
+				//En caso de no se haya encontrado ninguna coordenada para meter el barco, buscar otras con barcos alrededor
+				if($intentos >= 2000){
+					$rango1 = ($direccion == 0 ? $filas : $columnas) - $largo;
+					$rango2 = ($direccion == 0 ? $columnas : $filas) - 1;
+					do{
+						//Cambiar la direccion si no encuentra un lugar donde ponerse o no cabe en el tablero
+						if($intentos == 3000 || ($intentos < 3000 && $rango1 < 0)){
+							$direccion = $direccion == 1 ? 0 : 1;
+							$rango1 = ($direccion == 0 ? $filas : $columnas) - $largo;
+							$rango2 = ($direccion == 0 ? $columnas : $filas) - 1;
+						}else if($intentos == 4000 || $rango1 < 0) {
+							unset($_SESSION['tablero']);
+							unset($_SESSION['estadoBarcos']);
+							unset($_SESSION['barcosActuales']);
+							unset($_SESSION['finPartida']);
+							unset($_SESSION['intentos']);
+							return false;
+						}
+
+						$intentos ++;
+
+						$posicion1 = mt_rand(0, $rango1);
+						$posicion2 = rand(0, $rango2);
+					}while(!sePuedeColocarBarco($posicion1, $posicion2, $largo, $direccion));
+				}
 				colocarBarco($posicion1, $posicion2, $largo, $direccion, $id);
 			}
 			return true;
@@ -164,6 +186,41 @@
 				}
 			}
 			return true;
+		}
+
+		//Comprueva si el barco cabe en la posicion indicada
+		function hayBarcosAlLado($posicion1, $posicion2, $largo, $direccion){
+			for($i = 0; $i < $largo; $i++){
+				if($direccion == 0){ //Vertical
+					//Derecha
+					if(isset($_SESSION['tablero'][$posicion1 + $i][$posicion2+1]))
+						if($_SESSION['tablero'][$posicion1 + $i][$posicion2+1] != -1) return true;
+					//Izquierda
+					if(isset($_SESSION['tablero'][$posicion1 + $i][$posicion2-1]))
+						if($_SESSION['tablero'][$posicion1 + $i][$posicion2-1] != -1) return true;
+					//Arriba
+					if(isset($_SESSION['tablero'][$posicion1 + $i + 1][$posicion2]))
+						if($_SESSION['tablero'][$posicion1 + $i + 1][$posicion2] != -1) return true;
+					//Abajo
+					if(isset($_SESSION['tablero'][$posicion1 + $i - 1][$posicion2]))
+						if($_SESSION['tablero'][$posicion1 + $i - 1][$posicion2] != -1) return true;
+				}else{//Horizontal
+					//Arriba
+					if(isset($_SESSION['tablero'][$posicion2 + 1][$posicion1 + $i]))
+						if($_SESSION['tablero'][$posicion2 + 1][$posicion1 + $i] != -1) return true;
+					//Abajo
+					if(isset($_SESSION['tablero'][$posicion2 - 1][$posicion1 + $i]))
+						if($_SESSION['tablero'][$posicion2 - 1][$posicion1 + $i] != -1) return true;
+					//Derecha
+					if(isset($_SESSION['tablero'][$posicion2][$posicion1 + $i + 1]))
+						if($_SESSION['tablero'][$posicion2][$posicion1 + $i + 1] != -1) return true;
+					//Izquierda
+					if(isset($_SESSION['tablero'][$posicion2][$posicion1 + $i - 1]))
+						if($_SESSION['tablero'][$posicion2][$posicion1 + $i - 1] != -1) return true;
+
+				}
+			}
+			return false;
 		}
 
 		//Coloca el barco en pa posicion indicada

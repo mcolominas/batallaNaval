@@ -5,7 +5,7 @@
 	//Dimensiones tablero
 	$filas = 8;
 	$columnas = 8;
-	$maxBarcos = 8;
+	$maxBarcos = 6;
 
 	if($_SERVER['REQUEST_METHOD'] == 'GET'){
 		if(isset($_GET['reset']) && $_GET['reset'] == "true"){ // ?reset=true
@@ -105,7 +105,7 @@
 			</div>
 				<div>
 					<!-- Descomentar para ver las posiciones de los barcos -->
-					<?php //mostrarTablero2();?>
+					<?php mostrarTablero2();?>
 				</div>
 			</div>
 		<?php }?>
